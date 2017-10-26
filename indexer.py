@@ -1,9 +1,11 @@
 import pymorphy2
-import re, string, pickle, os
+import re, string, pickle, os, math
+
 class ReverseIndex:
     pregex = re.compile('[%s]' % re.escape(string.punctuation))
-    stoppos = ["PREP", "CONJ"]
-    def __init__(self):
+    #stoppos = ["PREP", "CONJ"]
+    def __init__(self, stoppos:list):
+        self.stoppos = stoppos
         self.words = {}
         self.length = 0
         self.analyzer = pymorphy2.MorphAnalyzer()
@@ -17,14 +19,18 @@ class ReverseIndex:
         self.length += 1
         print("Added a text")
 
-    def search(self, query:str):
-        pass
+    def get_idf(self, term):
+        termlist = self.words.get(term, [])
+        df = len(termlist) + 1
+
+        return math.log(self.length / df)
 
     def load(self, name="index.pkl"):
-        with open(name, 'rb') as loadfile:
-            tmp_dict = pickle.load(loadfile)
+        if name:
+            with open(name, 'rb') as loadfile:
+                tmp_dict = pickle.load(loadfile)
 
-        self.__dict__.update(tmp_dict)
+            self.__dict__.update(tmp_dict)
 
     def save(self, name="index.pkl"):
         with open(name, 'wb') as savefile:
@@ -32,7 +38,7 @@ class ReverseIndex:
 
 if __name__ == "__main__":
     paths = [x for x in os.listdir('.') if x.endswith(".txt")]
-    index = ReverseIndex()
+    index = ReverseIndex([])
     for path in paths:
         with open(path) as text:
             content = text.read()
@@ -40,7 +46,7 @@ if __name__ == "__main__":
 
     index.save()
 
-    test_in = ReverseIndex()
+    test_in = ReverseIndex([])
     test_in.load()
 
     print("done")
