@@ -26,7 +26,7 @@ class BM25Ranking:
     def load_texts(self, path="."):
         texts = [x for x in os.listdir(path) if x.endswith(".txt")]
         for text in texts:
-            with open(text, "r") as io:
+            with open(text, "r", encoding="utf-8") as io:
                 frags = io.read().split("@")
                 if len(frags) != 5: continue
                 lfrag = frags[4].split("\n\n")
@@ -76,7 +76,8 @@ class BM25Ranking:
 
 if __name__ == "__main__":
     ranking = BM25Ranking()
-    ranking.load()
+    ranking.load_texts()
+    ranking.save()
     print("Ranker loaded")
     results = ranking.process_query("баня на севастопольской")
     print("Done")

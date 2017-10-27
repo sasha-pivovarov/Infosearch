@@ -4,12 +4,11 @@ import datetime
 
 class NewsArchiveGrabber():
 
-    def __init__(self, mainlink:str, archlink:str, step:int, stop:int, startdate:datetime):
+    def __init__(self, mainlink:str, archlink:str, startdate:datetime):
         self.archive_link = archlink
         self.mainlink = mainlink
         self.startdate = startdate
-        self.step = step
-        self.stop = stop
+
         self.links = []
         self.articles = []
         self.grab_article_links()
@@ -64,5 +63,5 @@ if __name__ == "__main__":
     start = datetime.datetime.strptime("01-01-2014", "%d-%m-%Y")
     # modifier = "?curPos="
 
-    grabber = NewsArchiveGrabber(mainlink, archlink, 10, 1320, start)
+    grabber = NewsArchiveGrabber(mainlink, archlink, start)
 

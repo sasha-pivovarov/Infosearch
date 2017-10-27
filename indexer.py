@@ -40,7 +40,7 @@ if __name__ == "__main__":
     paths = [x for x in os.listdir('.') if x.endswith(".txt")]
     index = ReverseIndex([])
     for path in paths:
-        with open(path) as text:
+        with open(path, encoding="utf-8") as text:
             content = text.read()
             index.add(content)
 
